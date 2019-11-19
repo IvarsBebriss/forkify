@@ -1,5 +1,6 @@
 import { elements } from './base';
 import { Fraction } from 'fractional';
+import fracty from 'fracty';
 
 export const clearRecipe = () => {
     elements.recipe.innerHTML = '';
@@ -7,17 +8,17 @@ export const clearRecipe = () => {
 
 const formatCount = count => {
     if (count){
-        const int = Math.floor(count);
-        if(int === count || count - int < 0.001 || count < int) return Math.round(count);
-        if(count - int > 0.99) return Math.round(count);
-        console.log(count - int);
-        const fr = new Fraction(count - int);
-        return `${int ? `${int} `:``}${fr.numerator}/${fr.denominator}`; 
+        // const int = Math.floor(count);
+        // if(int === count || count - int < 0.001 || count < int) return Math.round(count);
+        // if(count - int > 0.99) return Math.round(count);
+        // const fr = new Fraction(count - int);
+        // return `${int ? `${int} `:``}${fr.numerator}/${fr.denominator}`;
+        return `${fracty(count)}`; 
     }
     return '?';
 }
 
-export const renderRecipe = recipe => {
+export const renderRecipe = (recipe, isLiked) => {
     
     const createIngredient = (e) => {
         return `<li class="recipe__item">
@@ -70,7 +71,7 @@ export const renderRecipe = recipe => {
             </div>
                 <button class="recipe__love">
                     <svg class="header__likes">
-                        <use href="img/icons.svg#icon-heart-outlined"></use>
+                        <use href="img/icons.svg#icon-heart${isLiked ? '' : '-outlined'}"></use>
                     </svg>
                 </button>
             </div>
@@ -82,7 +83,7 @@ export const renderRecipe = recipe => {
                     ${recipe.ingredients.map( e => createIngredient(e)).join('')}
                 </ul>
 
-                <button class="btn-small recipe__btn">
+                <button class="btn-small recipe__btn recipe__btn--add">
                     <svg class="search__icon">
                         <use href="img/icons.svg#icon-shopping-cart"></use>
                     </svg>
